@@ -33,7 +33,7 @@ const Hero = () => {
             View My Work
           </button>
           <a href="/resume/AdityaResume.pdf" download="Aditya_Resume.pdf">
-            <button className="border border-purple-400 px-8 py-4 rounded-full hover:bg-purple-400 hover:bg-opacity-20 transition-all">
+            <button className="border border-purple-400 px-8 py-4 rounded-full hover:bg-purple-400 hover:bg-opacity-20 transition-al">
               Download CV
             </button>
           </a>
