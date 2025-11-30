@@ -22,11 +22,12 @@ import BackButton from "../BackButton";
 function Ecom() {
   const navigate = useNavigate();
   const [ViewMoreDetails, setViewMoreDetails] = useState([]);
-
+  const [chkTok, setChkTok] = useState(null)
   // Session expiry
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    setChkTok(token)
     const interval = setInterval(() => {
-      const token = localStorage.getItem("token");
 
       if (token) {
         localStorage.removeItem("token");
@@ -43,28 +44,33 @@ function Ecom() {
 
   return (
     <>
-      <BackButton />
+      {chkTok ? (
+        <BackButton />
+      ) : (
+        <></>
+
+      )
+      }
       <div></div>
       <Routes>
-        <Route path="/" element={<LoginPage />} />
+        <Route path="/ecommerce/login" element={<LoginPage />} />
 
         <Route
-          path="/ecommerce/home"
-          element={
-            <ProtectedRoute
-              element={<Home setViewMoreDetails={setViewMoreDetails} />}
-              allowedRoles={["customer"]}
-            />
-          }
+          path="/"
+
+          element={<Home setViewMoreDetails={setViewMoreDetails} />}
+
+
+
         />
         <Route
           path="/ecommerce/home/viewmore"
-          element={
-            <ProtectedRoute
-              element={<ViewMore ViewMoreDetails={ViewMoreDetails} />}
-              allowedRoles={["customer"]}
-            />
-          }
+
+
+          element={<ViewMore ViewMoreDetails={ViewMoreDetails} />}
+
+
+
         />
         <Route
           path="/ecommerce/home/place-order"
