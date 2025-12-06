@@ -21,7 +21,7 @@ import BackButton from "../BackButton";
 
 function Ecom() {
   const navigate = useNavigate();
-  const [ViewMoreDetails, setViewMoreDetails] = useState([]);
+  const [ViewMoreDetails, setViewMoreDetails] = useState(null);
   const [chkTok, setChkTok] = useState(null)
   // Session expiry
   useEffect(() => {
@@ -63,6 +63,7 @@ function Ecom() {
 
 
         />
+        {/* {console.log(ViewMoreDetails)} */}
         <Route
           path="/ecommerce/home/viewmore"
 

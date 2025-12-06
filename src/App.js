@@ -133,7 +133,7 @@ function AppContent() {
               />
             }
           />
-          {console.log(ViewMoreDetails)}
+         
           <Route
             path="/ecommerce/home/viewmore"
 

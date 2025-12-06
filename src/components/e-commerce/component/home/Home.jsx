@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react";
-import homecss from "./home.module.css";
-import AutoSlider from "./AutoSlider";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import cartIocn from "../../images/banner/carticon1.png";
-import profile from "../../images/banner/profile.png";
 import {
-  FaSearch, FaHeart, FaShoppingBag, FaUser, FaBars, FaTruck, FaHeadset, FaShieldAlt, FaUndo, FaArrowRight, FaFacebookF,
+   FaHeart, FaShoppingBag,  FaTruck, FaHeadset, FaShieldAlt, FaUndo, FaArrowRight, FaFacebookF,
   FaTwitter,
   FaInstagram,
   FaPinterestP,
@@ -14,6 +10,7 @@ import {
   FaPhoneAlt,
   FaEnvelope,
 } from "react-icons/fa";
+import NavBar from "../NavBar";
 
 const Home = ({ setViewMoreDetails }) => {
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -25,11 +22,9 @@ const Home = ({ setViewMoreDetails }) => {
   const [showSubcategory, setShowSubcategory] = useState(false);
   const [showSubSubcategory, setShowSubSubcategory] = useState(false);
   const [showSubSubSubcategory, setShowSubSubSubcategory] = useState(false);
-  const [onModalOpen, setOnModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
   const [totalCartCount, setTotalCartCount] = useState(0);
-
   const navigate = useNavigate();
 
   const baseUrl = "https://ecommercebackend-1-fwcd.onrender.com";
@@ -46,7 +41,6 @@ const Home = ({ setViewMoreDetails }) => {
   }, [totalCartCount]);
   useEffect(() => {
     const token = localStorage.getItem("token");
-
     if (token) {
       axios
         .get("https://ecommercebackend-1-fwcd.onrender.com/api/cart", {
@@ -124,8 +118,8 @@ const Home = ({ setViewMoreDetails }) => {
       (product) => product.id === itemId
     );
     if (selectedItem) {
-      setViewMoreDetails(selectedItem);
-      navigate("/ecommerce/home/viewmore");
+      navigate("/ecommerce/home/viewmore", { state: selectedItem });
+
     }
   };
 
@@ -150,106 +144,22 @@ const Home = ({ setViewMoreDetails }) => {
     setCurrentPage(1);
   };
 
-  const logoutButton = () => {
-    localStorage.removeItem("token");
-    navigate("/ecommerce");
-  };
 
   const paginate = (items) => {
     const start = (currentPage - 1) * itemsPerPage;
     return items.slice(start, start + itemsPerPage);
   };
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [cartCount, setCartCount] = useState(0);
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen((prev) => !prev);
-  };
 
-  const toggleCart = () => {
-    // For now this just increments the count as a demo
-    setCartCount((prev) => prev + 1);
-  };
+
+
   const displayedProducts =
     filteredProducts.length > 0 ? filteredProducts : products;
   const totalPages = Math.ceil(displayedProducts.length / itemsPerPage);
 
   return (
     <>
-      <header className="bg-white shadow-sm sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-
-            {/* Logo */}
-            <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">S</span>
-              </div>
-              <span className="text-2xl font-bold text-gray-900">
-                Shop<span className="text-blue-600">Lux</span>
-              </span>
-            </div>
-
-            {/* Navigation */}
-            <nav className="hidden md:flex items-center space-x-8">
-
-            </nav>
-
-            {/* Search */}
-            <div className="hidden lg:flex items-center flex-1 max-w-md mx-8">
-              <div className="relative w-full">
-                <input
-                  type="text"
-                  placeholder="Search products..."
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-              </div>
-            </div>
-
-            {/* Icons */}
-            <div className="flex items-center space-x-4">
-
-
-              <button
-                className="text-gray-600 hover:text-blue-600 transition relative"
-                onClick={() => setCartCount(cartCount + 1)}
-              >
-                <FaShoppingBag className="text-xl" />
-                <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
-                  {cartCount}
-                </span>
-              </button>
-
-              <button className="text-gray-600 hover:text-blue-600 transition">
-                <FaUser className="text-xl" />
-              </button>
-
-              <button
-                className="md:hidden text-gray-600"
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              >
-                <FaBars className="text-xl" />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden bg-white border-t px-4 py-3 space-y-3">
-            <a href="#" className="block text-gray-700 font-medium">Home</a>
-            <a href="#" className="block text-gray-700 font-medium">Shop</a>
-            <a href="#" className="block text-gray-700 font-medium">Categories</a>
-            <a href="#" className="block text-gray-700 font-medium">Deals</a>
-            <a href="#" className="block text-gray-700 font-medium">About</a>
-            <div className="relative">
-              <input type="text" placeholder="Search products..." className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full" />
-              <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-            </div>
-          </div>
-        )}
-      </header>
+      <NavBar />
 
 
       <section className="bg-gray-50">
@@ -355,7 +265,7 @@ const Home = ({ setViewMoreDetails }) => {
                       </p>
                     </div>
 
-                    <button  className="inline-flex items-center rounded-full border border-gray-300 px-4 py-2 text-xs md:text-sm font-semibold text-gray-800 hover:bg-gray-100 transition">
+                    <button className="inline-flex items-center rounded-full border border-gray-300 px-4 py-2 text-xs md:text-sm font-semibold text-gray-800 hover:bg-gray-100 transition">
                       View Details
                     </button>
                   </div>
@@ -698,7 +608,7 @@ const Home = ({ setViewMoreDetails }) => {
 
                 <li>
                   <button
-                    className="px-3 py-1.5 text-xs border border-gray-300 rounded-full hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="px-3 py-1.5 text-xs border border-gray-300 rounded-full hover:bg-blue-gray-500 disabled:opacity-40 disabled:cursor-not-allowed"
                     onClick={() =>
                       setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                     }
@@ -776,30 +686,30 @@ const Home = ({ setViewMoreDetails }) => {
                 prices.
               </p>
               <div className="flex space-x-4">
-                <a
+                <p
                   href="#"
                   className="text-gray-400 hover:text-blue-400 transition"
                 >
                   <FaFacebookF className="text-xl" />
-                </a>
-                <a
+                </p>
+                <p
                   href="#"
                   className="text-gray-400 hover:text-blue-400 transition"
                 >
                   <FaTwitter className="text-xl" />
-                </a>
-                <a
+                </p>
+                <p
                   href="#"
                   className="text-gray-400 hover:text-blue-400 transition"
                 >
                   <FaInstagram className="text-xl" />
-                </a>
-                <a
+                </p>
+                <p
                   href="#"
                   className="text-gray-400 hover:text-blue-400 transition"
                 >
                   <FaPinterestP className="text-xl" />
-                </a>
+                </p>
               </div>
             </div>
 
@@ -808,29 +718,29 @@ const Home = ({ setViewMoreDetails }) => {
               <h4 className="text-white font-semibold mb-4">Quick Links</h4>
               <ul className="space-y-2">
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition">
+                  <p href="#" className="text-gray-400 hover:text-white transition">
                     Home
-                  </a>
+                  </p>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition">
+                  <p href="#" className="text-gray-400 hover:text-white transition">
                     Shop
-                  </a>
+                  </p>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition">
+                  <p href="#" className="text-gray-400 hover:text-white transition">
                     About Us
-                  </a>
+                  </p>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition">
+                  <p href="#" className="text-gray-400 hover:text-white transition">
                     Contact
-                  </a>
+                  </p>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition">
+                  <p href="#" className="text-gray-400 hover:text-white transition">
                     Blog
-                  </a>
+                  </p>
                 </li>
               </ul>
             </div>
@@ -840,29 +750,29 @@ const Home = ({ setViewMoreDetails }) => {
               <h4 className="text-white font-semibold mb-4">Customer Service</h4>
               <ul className="space-y-2">
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition">
+                  <p href="#" className="text-gray-400 hover:text-white transition">
                     FAQ
-                  </a>
+                  </p>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition">
+                  <p href="#" className="text-gray-400 hover:text-white transition">
                     Shipping Info
-                  </a>
+                  </p>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition">
+                  <p href="#" className="text-gray-400 hover:text-white transition">
                     Returns
-                  </a>
+                  </p>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition">
+                  <p href="#" className="text-gray-400 hover:text-white transition">
                     Track Order
-                  </a>
+                  </p>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition">
+                  <p href="#" className="text-gray-400 hover:text-white transition">
                     Size Guide
-                  </a>
+                  </p>
                 </li>
               </ul>
             </div>
@@ -873,15 +783,15 @@ const Home = ({ setViewMoreDetails }) => {
               <ul className="space-y-2 text-gray-400 text-sm">
                 <li className="flex items-center">
                   <FaMapMarkerAlt className="mr-2" />
-                  123 Commerce St, NY 10001
+                  Bangalore,India
                 </li>
                 <li className="flex items-center">
                   <FaPhoneAlt className="mr-2" />
-                  +1 (555) 123-4567
+                  +91 9066910183
                 </li>
                 <li className="flex items-center">
                   <FaEnvelope className="mr-2" />
-                  support@shoplux.com
+                  aditya@gmail.com
                 </li>
               </ul>
             </div>
